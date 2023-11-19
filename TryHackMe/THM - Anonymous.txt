@@ -1,5 +1,8 @@
-Anonymous - 22 Sept 2022
+TryHackMe CTF:  Anonymous 22 Sept 2022
+
 ================================================
+NMAP Scan
+
 21/tcp  open  ftp
 22/tcp  open  ssh
 139/tcp open  netbios-ssn
@@ -62,7 +65,7 @@ Host script results:
 |   date: 2022-09-22 17:01:24
 |_  start_date: 1600-12-31 23:58:45
 
-
+================================================
 
 ftp anonymous login
 clean.sh file that runs a script and outputs to removed_files.log --> 
