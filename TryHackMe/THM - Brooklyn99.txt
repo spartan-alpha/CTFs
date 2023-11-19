@@ -96,10 +96,7 @@ Holt's .ssh key
 Proc-Type: 4,ENCRYPTED
 DEK-Info: AES-128-CBC,7FEB01DFD04064BFFC03CBB293CEF0F9
 
-8rta3aQd8iUsjaUJ7S+j4wUbMhIGhWaSFOwuyDvKOfTEuFpNSv5DkA/p6D7qcBIE
-+YGVvFBPN3fOdnD0kyChCjRIsgtNsy2y/u2/ts7V8tsz/FqYHdpRDvn0btQc1WhV
-K+T7Mgg1ou2Lk/I+u8VTFk7mtUbgrB1t8IIqX5fC5ISopggr/KK/0Lk5uGkpUnRr
-gA+yiPx+6f5LNT3OwMeCfOI7zS+fqXsmM89mzsKcs6hmwlvGyg6UtwEO250vZJmE
+XXX              .... I7zS+fqXsmM89mzsKcs6hmwlvGyg6UtwEO250vZJmE
 ulDYrM9Y3hXAKxBXhKjAXUp3I07YRzvsupuiYqqgxTqcIRUlayq4CGnefqtmGnTd
 kSrnnvsfEwGJwDVajVrFEdwIXh/5FKPxQSOYktrTzWnijzzJk8qBBxxtpCSzz0Zk
 7/g/eDUWg6RpMDukWToQWlCS9lWQnOBBn2FHAHVmdnaHs9mjfDwtXg9Tvd5m9Nkk
