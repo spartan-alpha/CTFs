@@ -1,0 +1,47 @@
+THM - Wonderland CTF
+=============================================================================PORT   STATE SERVICE VERSION
+22/tcp open  ssh     OpenSSH 7.6p1 Ubuntu 4ubuntu0.3 (Ubuntu Linux; protocol 2.0)
+| ssh-hostkey: 
+|   2048 8e:ee:fb:96:ce:ad:70:dd:05:a9:3b:0d:b0:71:b8:63 (RSA)
+|   256 7a:92:79:44:16:4f:20:43:50:a9:a8:47:e2:c2:be:84 (ECDSA)
+|_  256 00:0b:80:44:e6:3d:4b:69:47:92:2c:55:14:7e:2a:c9 (EdDSA)
+80/tcp open  http    Golang net/http server (Go-IPFS json-rpc or InfluxDB API)
+| http-methods: 
+|_  Supported Methods: GET HEAD POST OPTIONS
+|_http-title: Follow the white rabbit.
+MAC Address: 02:A1:3D:99:C6:27 (Unknown)
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+
+/webroot (dir)
+
+000045:  C=200      5 L	       8 W	    153 Ch	  "img"
+000389:  C=200      8 L	      29 W	    258 Ch	  "r"
+004255:  C=301      0 L	       0 W	      0 Ch	  ""
+009353:  C=200     41 L	     187 W	   1565 Ch	  "poem"
+023994:  C=400      0 L	       3 W	     15 Ch	  "error_log"
+030006:  C=301      0 L	       0 W	      0 Ch	  ""
+
+/r/a/b/b/i/t
+
+<!DOCTYPE html>
+
+<head>
+    <title>Enter wonderland</title>
+    <link rel="stylesheet" type="text/css" href="/main.css">
+</head>
+
+<body>
+    <h1>Open the door and enter wonderland</h1>
+    <p>"Oh, you\u2019re sure to do that," said the Cat, "if you only walk long enough."</p>
+    <p>Alice felt that this could not be denied, so she tried another question. "What sort of people live about here?"
+    </p>
+    <p>"In that direction,"" the Cat said, waving its right paw round, "lives a Hatter: and in that direction," waving
+        the other paw, "lives a March Hare. Visit either you like: they\u2019re both mad."</p>
+    <p style="display: none;">alice:HowDothTheLittleCrocodileImproveHisShiningTail</p>
+    <img src="/img/alice_door.png" style="height: 50rem;">
+</body>
+
+----------------------
+ssh alice@$IP
+password: HowDothTheLittleCrocodileImproveHisShiningTail
+

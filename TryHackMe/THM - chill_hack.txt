@@ -1,0 +1,111 @@
+THM - brooklyn nine nine - 24 Oct 2022
+
+10.10.152.249
+
+---------------------
+users
+
+creds:
+
+
+flags:
+
+	user.txt
+	root.txt
+--------------------------------------
+
+PORT   STATE SERVICE
+21/tcp open  ftp
+22/tcp open  ssh
+80/tcp open  http
+
+PORT   STATE SERVICE VERSION
+21/tcp open  ftp     vsftpd 3.0.3
+| ftp-anon: Anonymous FTP login allowed (FTP code 230)
+|_-rw-r--r--    1 1001     1001           90 Oct 03  2020 note.txt
+| ftp-syst: 
+|   STAT: 
+| FTP server status:
+|      Connected to ::ffff:10.10.141.68
+|      Logged in as ftp
+|      TYPE: ASCII
+|      No session bandwidth limit
+|      Session timeout in seconds is 300
+|      Control connection is plain text
+|      Data connections will be plain text
+|      At session startup, client count was 6
+|      vsFTPd 3.0.3 - secure, fast, stable
+|_End of status
+22/tcp open  ssh     OpenSSH 7.6p1 Ubuntu 4ubuntu0.3 (Ubuntu Linux; protocol 2.0)
+| ssh-hostkey: 
+|   2048 09:f9:5d:b9:18:d0:b2:3a:82:2d:6e:76:8c:c2:01:44 (RSA)
+|   256 1b:cf:3a:49:8b:1b:20:b0:2c:6a:a5:51:a8:8f:1e:62 (ECDSA)
+|_  256 30:05:cc:52:c6:6f:65:04:86:0f:72:41:c8:a4:39:cf (EdDSA)
+80/tcp open  http    Apache httpd 2.4.29 ((Ubuntu))
+|_http-favicon: Unknown favicon MD5: 7EEEA719D1DF55D478C68D9886707F17
+| http-methods: 
+|_  Supported Methods: GET POST OPTIONS HEAD
+|_http-server-header: Apache/2.4.29 (Ubuntu)
+|_http-title: Game Info
+MAC Address: 02:BD:53:A6:AF:69 (Unknown)
+Service Info: OSs: Unix, Linux; CPE: cpe:/o:linux:linux_kernel
+
+
+
+000099:  C=200      0 L	       0 W	      0 Ch	  "contact.php"
+000124:  C=200    306 L	     818 W	  18301 Ch	  "contact.html"
+000164:  C=200   2188 L	    4179 W	  37910 Ch	  "style.css"
+000062:  C=200    643 L	    1718 W	  35184 Ch	  "index.html"
+000401:  C=200    337 L	    1094 W	  21339 Ch	  "about.html"
+000524:  C=200    330 L	     961 W	  19718 Ch	  "news.html"
+000711:  C=200    543 L	    1411 W	  30279 Ch	  "blog.html"
+002842:  C=200    358 L	     891 W	  19868 Ch	  "team.html"
+
+
+000083:  C=403      9 L	      28 W	    278 Ch	  "icons"
+000016:  C=200     91 L	     761 W	  16282 Ch	  "images"
+000550:  C=200     32 L	     211 W	   4334 Ch	  "css"
+000953:  C=200     28 L	     183 W	   3379 Ch	  "js"
+002771:  C=200     33 L	     235 W	   4763 Ch	  "fonts"
+005155:  C=200      9 L	      13 W	    168 Ch	  "secret"
+
+*** /secret
+command page that allows command injection
+
+multiple strings are filtered
+nc
+cat
+head
+more
+less
+tail
+ls
+
+**found dir is usable
+**sudo -l
+**nl (same as cat but with line numbers)
+/etc/passwd
+apaar:x:1001:1001
+anurodh:x:1002:1002:
+aurick
+
+200 PORT command successful. Consider using PASV.
+150 Here comes the directory listing.
+-rw-r--r--    1 1001     1001           90 Oct 03  2020 note.txt
+226 Directory send OK.
+ftp> exit
+221 Goodbye.
+root@ip-10-10-141-68:~# cat note.txt 
+
+Anurodh told me that there is some filtering on strings being put in the command -- Apaar
+
+
+/home/aapar/.helpline.sh
+#!/bin/bash
+echo
+echo "Welcome to helpdesk. Feel free to talk to anyone at any time!"
+echo
+read -p "Enter the person whom you want to talk with: " person 
+read -p "Hello user! I am $person, Please enter your message: " msg 
+$msg 2>/dev/null
+echo "Thank you for your precious time!" 

